@@ -4,9 +4,15 @@ import Login from './Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { booleanContext } from '../Context';
 import Home from './Home';
+import { Button } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+import PublishComponent from './PublishComponent';
+
 const CHECK_LOGIN_URL = '/user/auth/token/refresh';
 
 function MainPage(props) {
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState('')
     const{isLoggedIn, setIsLoggedIn} =useContext(booleanContext)
     const refresh = {headers :{
@@ -18,36 +24,39 @@ function MainPage(props) {
 
 
 
-    const checkLoggedIn = async (e) => {
+//     const checkLoggedIn = async (e) => {
       
-        try{
+//         try{
           
-            const response = await axios.get(CHECK_LOGIN_URL, refresh);
-           setIsLoggedIn(true)
-        setEmail(localStorage.getItem("email"))
+//             const response = await axios.get(CHECK_LOGIN_URL, refresh);
+//            setIsLoggedIn(true)
+//         setEmail(localStorage.getItem("email"))
        
             
 
 
 
-        }catch (err) {
-            console.log(err);
-        }
-}
+//         }catch (err) {
+//             console.log(err);
+//         }
+// }
 
-useEffect(() => {
+// useEffect(() => {
 
-            checkLoggedIn()
+//             checkLoggedIn()
           
-}, [])
+// }, [])
 
 
     return (
       <>
       <Routes>
 
-     {isLoggedIn ? <Route path="/" element={<Home />} />:  <Route path="/" element={<Login />} />}
+     {/* {isLoggedIn ? <Route path="/" element={<Home />} />:  <Route path="/" element={<Login />} />} */}
+    {/* <a href='/publish'>Publish</a> */}
      </Routes>
+     <Home />
+     <PublishComponent />
       </>
     );
 }

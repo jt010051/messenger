@@ -7,8 +7,11 @@ import { booleanContext, usernameContext, oppositeContext, incrementContext, ref
 import Forgot from './components/Forgot';
 import NewPassword from './components/NewPassword'
 import Logout from './components/Logout';
+import { StompSessionProvider } from 'react-stomp-hooks';
+import SockJsClient from 'react-stomp';
 
-
+import PublishComponent from './components/PublishComponent'
+import Home from './components/Home';
 
 
 function App() {
@@ -16,6 +19,9 @@ function App() {
 
   return(
 <>
+<StompSessionProvider
+    url={'http://localhost:8080/ws'}>
+  
 <booleanContext.Provider value={{isLoggedIn, setIsLoggedIn}}>
 
 <Routes>
@@ -23,13 +29,17 @@ function App() {
 <Route>
 <Route path="/forgot" element={<Forgot />} />
 <Route path="/logout" element={<Logout />} />
+<Route path="/publish" element={<PublishComponent />} />
+< Route path="/" element={<Home />} />
 
 <Route path="/changePassword"element={<NewPassword />} />
-          <Route path="/" element={<MainPage />} />
+          <Route path="/*" element={<MainPage />} />
         </Route>
         
 </Routes>
 </booleanContext.Provider>
+</StompSessionProvider>
+
 
 </>
   );

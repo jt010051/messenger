@@ -5,7 +5,15 @@ function Logout() {
     const{isLoggedIn, setIsLoggedIn} =useContext(booleanContext )
 
     setIsLoggedIn(false)
-    localStorage.clear()
+    localStorage.removeItem("Authorities");
+    localStorage.removeItem("Refresh Token");
+    localStorage.removeItem("Access Token");
+  
+    localStorage.removeItem("email");
+    localStorage.removeItem("phone");
+  
+    localStorage.removeItem("password");
+    localStorage.removeItem("role");
     
       return (
           <>

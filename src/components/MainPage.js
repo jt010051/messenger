@@ -2,18 +2,22 @@ import axios from '../api/axios'
 import React, {useEffect, useState, useContext, useRef} from 'react'
 import Login from './Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { booleanContext, usernameContext } from '../Context';
+import { booleanContext, StompContext, usernameContext } from '../Context';
 import Home from './Home';
+import Menu from './Menu';
+import { useStompClient } from 'react-stomp-hooks';
+
 const CHECK_LOGIN_URL = '/chatUsers/auth/token/refresh';
 
 function MainPage(props) {
     const [email, setEmail] = useState('')
     const{isLoggedIn, setIsLoggedIn} =useContext(booleanContext)
-    const[currentUser, setCurrentUser] =useState('')
-
+    const currentUser =   localStorage.getItem("email");
+    const stompClient = useStompClient();
+    localStorage.setItem("client", useStompClient());
     const refresh = {headers :{
         'Content-Type' : 'application/json',
-        AUTHORIZATION : 'Bearer ' +localStorage.getItem("Refresh Token Copy")
+        AUTHORIZATION : 'Bearer ' +localStorage.getItem("Refresh Token")
         
             }}
 
@@ -25,10 +29,9 @@ function MainPage(props) {
         try{
           
             const response = await axios.get(CHECK_LOGIN_URL, refresh);
-            console.log(response);
             
            setIsLoggedIn(true)
-        setEmail(localStorage.getItem("email Copy"))
+        setEmail(localStorage.getItem("email"))
        
             
 
@@ -36,6 +39,7 @@ function MainPage(props) {
 
         }catch (err) {
             console.log(err);
+            localStorage.clear();
         }
 }
 
@@ -48,13 +52,14 @@ useEffect(() => {
 
     return (
       <>
-              <usernameContext.Provider value={{currentUser, setCurrentUser}}>
+        <StompContext.Provider value={stompClient}>
 
       <Routes>
      {isLoggedIn ? <Route path="/" element={<Home />} />:  <Route path="/" element={<Login />} />}
      {/* < Route path="/" element={<Home />} /> */}
      </Routes>
-          </usernameContext.Provider>
+          </StompContext.Provider>
+
 
       </>
     );
